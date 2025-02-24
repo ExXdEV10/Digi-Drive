@@ -7,6 +7,8 @@ import FilesPage from "./pages/admin/files";
 import ReportsPage from "./pages/admin/reports";
 import BillingPage from "./pages/admin/billing";
 import LogsPage from "./pages/admin/logs";
+import SettingsPage from "./pages/admin/settings";
+import SupportPage from "./pages/admin/support";
 import routes from "tempo-routes";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/admin/reports" element={<ReportsPage />} />
         <Route path="/admin/billing" element={<BillingPage />} />
         <Route path="/admin/logs" element={<LogsPage />} />
+        <Route path="/admin/settings" element={<SettingsPage />} />
+        <Route path="/admin/support" element={<SupportPage />} />
         {import.meta.env.VITE_TEMPO && <Route path="/tempobook/*" />}
       </Routes>
     </Suspense>
