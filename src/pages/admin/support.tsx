@@ -13,6 +13,7 @@ import {
 import { Link } from "react-router-dom";
 
 export default function SupportPage() {
+  const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -36,9 +37,14 @@ export default function SupportPage() {
           </p>
         </div>
 
-        <SupportFilters />
-        <BulkActions />
-        <SupportTicketList />
+        <SupportFilters
+          onSearch={(query) => console.log("Searching:", query)}
+        />
+        <BulkActions selectedCount={selectedTickets.length} />
+        <SupportTicketList
+          onSelectionChange={setSelectedTickets}
+          selectedTickets={selectedTickets}
+        />
       </div>
     </AdminLayout>
   );
