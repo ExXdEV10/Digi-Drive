@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,6 +39,18 @@ interface TicketDetailsProps {
 }
 
 export function TicketDetails({ ticket }: TicketDetailsProps) {
+  const [replyText, setReplyText] = useState("");
+
+  const handleSendReply = () => {
+    if (!replyText.trim()) return;
+    console.log("Sending reply:", replyText);
+    setReplyText("");
+  };
+
+  const handleAttachFile = () => {
+    console.log("Opening file attachment dialog");
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
@@ -115,6 +128,7 @@ export function TicketDetails({ ticket }: TicketDetailsProps) {
                 key={attachment.name}
                 variant="outline"
                 className="h-auto py-1 px-2"
+                onClick={() => console.log("Downloading:", attachment.name)}
               >
                 <FileText className="h-4 w-4 mr-2" />
                 <span className="text-sm">{attachment.name}</span>
@@ -163,11 +177,26 @@ export function TicketDetails({ ticket }: TicketDetailsProps) {
       </ScrollArea>
 
       <div className="flex gap-2">
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" onClick={handleAttachFile}>
           <Paperclip className="h-4 w-4" />
         </Button>
-        <Textarea placeholder="Type your reply..." className="min-h-[80px]" />
-        <Button size="icon" className="self-end">
+        <Textarea
+          placeholder="Type your reply..."
+          className="min-h-[80px]"
+          value={replyText}
+          onChange={(e) => setReplyText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+              handleSendReply();
+            }
+          }}
+        />
+        <Button
+          size="icon"
+          className="self-end"
+          onClick={handleSendReply}
+          disabled={!replyText.trim()}
+        >
           <Send className="h-4 w-4" />
         </Button>
       </div>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AdminLayout } from "@/components/admin/layout";
 import { SupportTicketList } from "@/components/admin/support/support-ticket-list";
 import { SupportFilters } from "@/components/admin/support/support-filters";
@@ -14,6 +15,23 @@ import { Link } from "react-router-dom";
 
 export default function SupportPage() {
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
+
+  const handleSearch = (query: string) => {
+    console.log("Searching for:", query);
+  };
+
+  const handlePriorityChange = (priority: string) => {
+    console.log("Filtering by priority:", priority);
+  };
+
+  const handleStatusChange = (status: string) => {
+    console.log("Filtering by status:", status);
+  };
+
+  const handleDateChange = (range: { from: Date; to: Date }) => {
+    console.log("Filtering by date range:", range);
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -38,7 +56,10 @@ export default function SupportPage() {
         </div>
 
         <SupportFilters
-          onSearch={(query) => console.log("Searching:", query)}
+          onSearch={handleSearch}
+          onPriorityChange={handlePriorityChange}
+          onStatusChange={handleStatusChange}
+          onDateChange={handleDateChange}
         />
         <BulkActions selectedCount={selectedTickets.length} />
         <SupportTicketList

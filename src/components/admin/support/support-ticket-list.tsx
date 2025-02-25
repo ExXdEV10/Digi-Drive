@@ -80,10 +80,30 @@ const tickets = [
   },
 ];
 
-export function SupportTicketList() {
+interface SupportTicketListProps {
+  onSelectionChange?: (selectedIds: string[]) => void;
+  selectedTickets?: string[];
+}
+
+export function SupportTicketList({
+  onSelectionChange,
+  selectedTickets = [],
+}: SupportTicketListProps) {
   const [selectedTicket, setSelectedTicket] = useState<
     (typeof tickets)[0] | null
   >(null);
+
+  const handleSelectAll = (checked: boolean) => {
+    const newSelected = checked ? tickets.map((t) => t.ticketId) : [];
+    onSelectionChange?.(newSelected);
+  };
+
+  const handleSelectTicket = (ticketId: string, checked: boolean) => {
+    const newSelected = checked
+      ? [...selectedTickets, ticketId]
+      : selectedTickets.filter((id) => id !== ticketId);
+    onSelectionChange?.(newSelected);
+  };
 
   return (
     <div className="rounded-md border">
@@ -91,7 +111,12 @@ export function SupportTicketList() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-12">
-              <Checkbox />
+              <Checkbox
+                checked={selectedTickets.length === tickets.length}
+                onCheckedChange={(checked) =>
+                  handleSelectAll(checked as boolean)
+                }
+              />
             </TableHead>
             <TableHead>Ticket ID</TableHead>
             <TableHead>User</TableHead>
@@ -106,7 +131,12 @@ export function SupportTicketList() {
           {tickets.map((ticket) => (
             <TableRow key={ticket.ticketId}>
               <TableCell>
-                <Checkbox />
+                <Checkbox
+                  checked={selectedTickets.includes(ticket.ticketId)}
+                  onCheckedChange={(checked) =>
+                    handleSelectTicket(ticket.ticketId, checked as boolean)
+                  }
+                />
               </TableCell>
               <TableCell className="font-medium">{ticket.ticketId}</TableCell>
               <TableCell>
@@ -161,9 +191,27 @@ export function SupportTicketList() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Assign</DropdownMenuItem>
-                      <DropdownMenuItem>Change Priority</DropdownMenuItem>
-                      <DropdownMenuItem>Close Ticket</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          console.log("Assign ticket:", ticket.ticketId)
+                        }
+                      >
+                        Assign
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          console.log("Change priority:", ticket.ticketId)
+                        }
+                      >
+                        Change Priority
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          console.log("Close ticket:", ticket.ticketId)
+                        }
+                      >
+                        Close Ticket
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
